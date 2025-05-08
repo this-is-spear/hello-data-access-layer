@@ -1,0 +1,80 @@
+###
+# 은행 서비스 API 에러 케이스 테스트
+###
+
+# 기본 URL 설정
+@baseUrl = http://localhost:8080/api/bank
+
+### 1. 잘못된 형식의 계좌 생성 요청 (잘못된 JSON 형식)
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "accountNumber" 12345
+}
+
+### 2. 존재하지 않는 계좌 잔액 조회
+GET {{baseUrl}}/accounts/NON-EXISTENT-ACCOUNT
+
+### 3. 음수 금액으로 이체 시도
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "ACCT-12345",
+  "targetAccountNumber": "ACCT-67890",
+  "amount": -50.00
+}
+
+### 4. 필수 필드 누락한 이체 요청
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "ACCT-12345",
+  "amount": 50.00
+}
+
+### 5. 잔액을 초과하는 금액 이체 시도
+# 이 테스트는 애플리케이션에서 잔액 검증 로직이 구현되어 있다고 가정합니다
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "ACCT-12345",
+  "targetAccountNumber": "ACCT-67890",
+  "amount": 100000.00
+}
+
+### 6. 지원하지 않는 엔드포인트 호출
+GET {{baseUrl}}/unsupported-endpoint
+
+### 7. 잘못된 HTTP 메서드 사용
+DELETE {{baseUrl}}/accounts/ACCT-12345
+
+### 8. 빈 요청 본문으로 이체 시도
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+}
+
+### 9. 존재하지 않는 출금 계좌로 이체 시도
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "NON-EXISTENT-SOURCE",
+  "targetAccountNumber": "ACCT-67890",
+  "amount": 50.00
+}
+
+### 10. 존재하지 않는 입금 계좌로 이체 시도
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "ACCT-12345",
+  "targetAccountNumber": "NON-EXISTENT-TARGET",
+  "amount": 50.00
+}
