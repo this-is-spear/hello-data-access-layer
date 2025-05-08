@@ -1,0 +1,132 @@
+###
+# 은행 서비스 기능 확장 테스트
+###
+
+# 기본 URL 설정
+@baseUrl = http://localhost:8080/api/bank
+
+### 1. 테스트 준비: 여러 개의 테스트 계좌 생성
+
+# 첫 번째 계좌 생성
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "accountNumber": "TEST-ACCT-1"
+}
+
+### 두 번째 계좌 생성
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "accountNumber": "TEST-ACCT-2"
+}
+
+### 세 번째 계좌 생성
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "accountNumber": "TEST-ACCT-3"
+}
+
+### 2. 시나리오: 계좌 간 복합 이체 패턴
+
+### 첫 번째 계좌에서 두 번째 계좌로 100원 이체
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-1",
+  "targetAccountNumber": "TEST-ACCT-2",
+  "amount": 100.00
+}
+
+### 두 번째 계좌에서 세 번째 계좌로 50원 이체
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-2",
+  "targetAccountNumber": "TEST-ACCT-3",
+  "amount": 50.00
+}
+
+### 세 번째 계좌에서 첫 번째 계좌로 25원 이체 (순환 이체)
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-3",
+  "targetAccountNumber": "TEST-ACCT-1",
+  "amount": 25.00
+}
+
+### 모든 계좌 잔액 확인
+GET {{baseUrl}}/accounts
+
+### 3. 개별 계좌 잔액 검증
+
+### 첫 번째 계좌 잔액 (예상: -75.00)
+GET {{baseUrl}}/accounts/TEST-ACCT-1
+
+### 두 번째 계좌 잔액 (예상: +50.00)
+GET {{baseUrl}}/accounts/TEST-ACCT-2
+
+### 세 번째 계좌 잔액 (예상: +25.00)
+GET {{baseUrl}}/accounts/TEST-ACCT-3
+
+### 4. 추가 테스트: 소액 이체
+
+### 첫 번째 계좌에서 두 번째 계좌로 0.01원 이체
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-1",
+  "targetAccountNumber": "TEST-ACCT-2",
+  "amount": 0.01
+}
+
+### 두 번째 계좌 잔액 확인 (소액 이체 반영 확인)
+GET {{baseUrl}}/accounts/TEST-ACCT-2
+
+### 5. 대량 거래 테스트 시뮬레이션
+
+### 반복 이체: 첫 번째 계좌에서 두 번째 계좌로 10번 1원씩 이체 
+# 실제로는 루프를 사용하여 10회 실행해야 합니다
+# 여기서는 예시로 3번만 보여줍니다
+
+# 이체 1
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-1",
+  "targetAccountNumber": "TEST-ACCT-2",
+  "amount": 1.00
+}
+
+# 이체 2
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-1",
+  "targetAccountNumber": "TEST-ACCT-2",
+  "amount": 1.00
+}
+
+# 이체 3
+POST {{baseUrl}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountNumber": "TEST-ACCT-1",
+  "targetAccountNumber": "TEST-ACCT-2",
+  "amount": 1.00
+}
+
+### 최종 결과 확인: 모든 계좌 잔액
+GET {{baseUrl}}/accounts
