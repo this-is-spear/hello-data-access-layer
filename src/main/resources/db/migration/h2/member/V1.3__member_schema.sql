@@ -1,7 +1,5 @@
 -- V1.3__member_schema.sql
--- 회원 관련 스키마 생성
 
--- Member 테이블 생성
 CREATE TABLE IF NOT EXISTS member (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -12,7 +10,6 @@ CREATE TABLE IF NOT EXISTS member (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 회원 이력 테이블 (추가 예시)
 CREATE TABLE IF NOT EXISTS member_history (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id BIGINT NOT NULL,

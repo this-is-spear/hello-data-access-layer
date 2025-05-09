@@ -6,11 +6,9 @@ import java.util.UUID
 
 @Entity
 class Transaction(
-    // 출금 계좌 번호 - Account의 accountNumber와 매핑
     @Column(name = "source_account_number")
     val sourceAccountNumber: String,
 
-    // 입금 계좌 번호 - Account의 accountNumber와 매핑
     @Column(name = "target_account_number")
     val targetAccountNumber: String,
 
