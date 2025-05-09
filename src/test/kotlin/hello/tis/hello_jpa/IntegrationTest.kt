@@ -1,4 +1,4 @@
-package hello.tis.hello_jpa.controller
+package hello.tis.hello_jpa
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import hello.tis.hello_jpa.controller.dto.CreateAccountRequest
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class BankControllerIntegrationTest {
+class IntegrationTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

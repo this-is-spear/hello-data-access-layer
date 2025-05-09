@@ -1,6 +1,7 @@
-package hello.tis.hello_jpa.repository
+package hello.tis.hello_jpa
 
 import hello.tis.hello_jpa.domain.Account
+import hello.tis.hello_jpa.repository.AccountRepository
 import io.hypersistence.utils.jdbc.validator.SQLStatementCountValidator
 import jakarta.persistence.EntityManagerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,7 @@ import kotlin.test.Test
 
 
 @SpringBootTest
-class AccountJpaTest {
+class SQLStatementCountValidatorTest {
     @Autowired
     private lateinit var accountRepository: AccountRepository
 
